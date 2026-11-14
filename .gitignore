@@ -1,0 +1,13 @@
+build/
+.gradle/
+run*/
+parts/
+out-check/
+.notes/
+*.log
+__pycache__/
+suitcase-test/
+logs/
+build-log.txt
+logs-*.txt
+shots-*/

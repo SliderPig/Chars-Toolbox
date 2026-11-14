@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+
+[[mods]]
+authors="Char"
+modId="chartoolbox"
+version="${file.jarVersion}"
+displayName="{C} Char's Toolbox"
+# It never talks to the server itself, so anyone can join anything with or without it.
+displayTest="IGNORE_ALL_VERSION"
+description='''
+One file with fourteen handy tools, each with its own on/off switch (Y key, /toolbox, or the cat on the pause screen):
+Map, Far View, Main Menu, Teams, Config Helper, Fortress Boxes, Bring my settings, Key clash fixer,
+Zoom (hold H), Little HUD, Pickup list, Gear watch, Memory watch and Cat corner.
+'''
+logoFile="chartoolbox_logo.png"
+# pixel art: keep the pixels sharp in the Mods list
+logoBlur=false
+
+[[dependencies.chartoolbox]]
+modId="forge"
+mandatory=true
+versionRange="[47,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.chartoolbox]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.21)"
+ordering="NONE"
+side="BOTH"

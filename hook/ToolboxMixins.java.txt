@@ -1,0 +1,41 @@
+package @PACKAGE@;
+
+import org.objectweb.asm.tree.ClassNode;
+import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
+import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
+
+import java.util.List;
+import java.util.Set;
+
+/**
+ * Leaves this mod's mixins out of the game altogether when its switch in Char's Toolbox was off at start-up.
+ * Named as "plugin" in the mod's mixins.json. (Written by the Toolbox's tools/install_hook.py --mixins.)
+ */
+public final class ToolboxMixins implements IMixinConfigPlugin {
+    @Override
+    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        return ToolboxSwitch.onAtStart();
+    }
+
+    @Override
+    public void onLoad(String mixinPackage) {}
+
+    @Override
+    public String getRefMapperConfig() {
+        return null;
+    }
+
+    @Override
+    public void acceptTargets(Set<String> myTargets, Set<String> otherTargets) {}
+
+    @Override
+    public List<String> getMixins() {
+        return null;
+    }
+
+    @Override
+    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
+
+    @Override
+    public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
+}

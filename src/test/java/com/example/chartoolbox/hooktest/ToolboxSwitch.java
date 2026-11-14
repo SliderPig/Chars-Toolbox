@@ -1,0 +1,81 @@
+package com.example.chartoolbox.hooktest;
+
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fml.loading.LoadingModList;
+
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Properties;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
+
+/**
+ * This mod's on/off switch when it is used inside Char's Toolbox. Without the Toolbox it is always on.
+ * The same file is in every mod the Toolbox carries; it uses nothing from the Toolbox itself.
+ * (Written by the Toolbox's tools/install_hook.py: change hook/ToolboxSwitch.java.txt there, not this copy.)
+ */
+public final class ToolboxSwitch {
+    private ToolboxSwitch() {}
+
+    private static final String ID = "hooktest";
+    /** Other mods that do this mod's job. With one of them installed, this mod starts off until its switch is flipped. */
+    private static final String[] SAME_JOB = {"somemapmod"};
+    private static final String LIVE = "chartoolbox.part." + ID, STARTED = "chartoolbox.started." + ID;
+    private static final boolean TOOLBOX = installed("chartoolbox");
+    private static final boolean AT_START = start();
+
+    /** Decided once when the game starts: keys, commands, the network channel and listeners follow this. */
+    public static boolean onAtStart() { return AT_START; }
+
+    /** The switch right now. */
+    public static boolean on() { return !TOOLBOX || !"false".equalsIgnoreCase(System.getProperty(LIVE)); }
+
+    /**
+     * No Toolbox: on. Otherwise the live value if there is one, else this mod's line in the file, else (no line yet:
+     * a first run) on unless a mod that does the same job is installed. The Toolbox works out the same answer by
+     * itself, so it doesn't matter which of the two the game starts first.
+     */
+    static boolean decide(boolean toolbox, String live, Supplier<String> fromFile, BooleanSupplier sameJobHere) {
+        if (!toolbox) return true;
+        String v = live != null ? live : fromFile.get();
+        if (v != null) return !v.trim().equalsIgnoreCase("false");
+        return !sameJobHere.getAsBoolean();
+    }
+
+    private static boolean start() {
+        boolean on = decide(TOOLBOX, System.getProperty(LIVE), ToolboxSwitch::fromFile, ToolboxSwitch::sameJobHere);
+        if (TOOLBOX) {
+            if (System.getProperty(LIVE) == null) System.setProperty(LIVE, String.valueOf(on));
+            System.setProperty(STARTED, String.valueOf(on));
+        }
+        return on;
+    }
+
+    /** Is this mod in the game? (The loading list: it is ready before any mod is built and before mixins are applied.) */
+    private static boolean installed(String modId) {
+        try {
+            LoadingModList mods = LoadingModList.get();
+            return mods != null && mods.getModFileById(modId) != null;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    private static boolean sameJobHere() {
+        for (String id : SAME_JOB) if (installed(id)) return true;
+        return false;
+    }
+
+    private static String fromFile() {
+        try {
+            Path file = FMLPaths.CONFIGDIR.get().resolve("chartoolbox").resolve("parts.properties");
+            if (!Files.exists(file)) return null;
+            Properties p = new Properties();
+            try (Reader r = Files.newBufferedReader(file)) { p.load(r); }
+            return p.getProperty(ID);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+}

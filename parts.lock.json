@@ -1,0 +1,8 @@
+{
+  "charmap": { "folder": "charmap", "version": "1.2", "group": "com.example.charmap", "sameJob": ["xaerominimap", "xaeroworldmap", "journeymap"] },
+  "charlod": { "folder": "charlod", "version": "1.2", "group": "com.example.charlod", "sameJob": ["distanthorizons"] },
+  "charmenu": { "folder": "charmenu", "version": "3.0", "group": "com.example.charmenu", "sameJob": ["fancymenu", "custommainmenu", "mainmenu", "custommenu"] },
+  "charteams": { "folder": "charteams", "version": "1.1", "group": "com.example.charteams" },
+  "charconfig": { "folder": "charconfig", "version": "1.1", "group": "com.example.charconfig" },
+  "fortressboxes": { "folder": "fortressboxes", "version": "1.1", "group": "com.example.fortressboxes" }
+}
